@@ -141,3 +141,22 @@
         @apply bg-background text-foreground;
     }
 }
+
+.tiptap-editor h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0.75rem 0 0.5rem;
+}
+.tiptap-editor p { margin: 0.5rem 0; }
+.tiptap-editor ul { list-style: disc; padding-left: 1.25rem; margin: 0.5rem 0; }
+.tiptap-editor ol { list-style: decimal; padding-left: 1.25rem; margin: 0.5rem 0; }
+.tiptap-editor blockquote {
+    border-left: 3px solid var(--color-border);
+    padding-left: 0.75rem;
+    color: var(--color-muted-foreground);
+    margin: 0.5rem 0;
+}
+.tiptap-editor strong { font-weight: 600; }
+.tiptap-editor em { font-style: italic; }
+.tiptap-editor a { color: #2563eb; text-decoration: underline; }
+

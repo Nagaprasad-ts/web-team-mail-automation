@@ -9,7 +9,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { register } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 import type { TeamInvitationContext } from '@/types';
@@ -106,20 +105,6 @@ export default function Login({
                             </Button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
-                            <TextLink
-                                href={register({
-                                    query: {
-                                        invitation: teamInvitation?.code,
-                                    },
-                                })}
-                                data-test="register-link"
-                                tabIndex={5}
-                            >
-                                Sign up
-                            </TextLink>
-                        </div>
                     </>
                 )}
             </Form>

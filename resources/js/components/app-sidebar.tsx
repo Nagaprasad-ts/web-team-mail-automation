@@ -1,7 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { CalendarClock, History, LayoutGrid, Mail, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { TeamSwitcher } from '@/components/team-switcher';
@@ -29,18 +28,25 @@ export function AppSidebar() {
             href: dashboardUrl,
             icon: LayoutGrid,
         },
-    ];
-
-    const footerNavItems: NavItem[] = [
         {
-            title: 'Repository',
-            href: 'https://github.com/laravel/react-starter-kit',
-            icon: FolderGit2,
+            title: 'Mail Automation',
+            href: '/mail-automation',
+            icon: Mail,
         },
         {
-            title: 'Documentation',
-            href: 'https://laravel.com/docs/starter-kits#react',
-            icon: BookOpen,
+            title: 'Schedules',
+            href: '/mail-automation/schedules',
+            icon: CalendarClock,
+        },
+        {
+            title: 'Recipients',
+            href: '/mail-automation/recipients',
+            icon: Users,
+        },
+        {
+            title: 'Campaign History',
+            href: '/mail-automation/history',
+            icon: History,
         },
     ];
 
@@ -68,7 +74,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

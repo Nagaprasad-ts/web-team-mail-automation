@@ -55,3 +55,42 @@ composer ci:check
 - Team invitations are created with an expiry and accepted/declined via signed URLs.
 - Soft deletes are enabled on `Team`. Restore is not currently exposed in the UI.
 - `app/Concerns/GeneratesSlug.php` handles unique slug generation for teams.
+- **Registration is disabled.** `Features::registration()` is removed from `config/fortify.php` and the register view/route is gone. Bootstrap users via `database/seeders/DatabaseSeeder.php`, which seeds the Web Team admin (`webteam@college.edu`) plus a personal team. The seeder does NOT use `WithoutModelEvents` — Team slug generation depends on the `creating` boot hook.
+
+## Mail Automation Feature
+
+The primary feature of this app. Sends department newsletters via Amazon SES.
+
+### Domain models
+
+- `DepartmentEmail` (`department_emails`) — master recipient list. `active = false` means "paused" (excluded from scheduled sends).
+- `MailCampaign` (`mail_campaigns`) — append-only log of every send. Stores the recipient list snapshot in `recipients` (JSON), `status` (sent/partial/failed), and `triggered_by` (`manual` / `cron`).
+- `MailSchedule` (`mail_schedules`) — singleton row (`MailSchedule::current()`) holding the user-configurable schedule: `enabled`, `frequency` (daily/weekly/monthly), `day_of_month`, `day_of_week`, `time`, template `subject`/`body`, and `recipient_ids` (JSON array — empty = "all active").
+
+### Sending pipeline
+
+- `App\Services\DepartmentMailer` is the single send entry point. Pass `recipientEmails: null` to send to all `active` department emails; otherwise pass an explicit list. It iterates, catches per-recipient failures, logs them, and writes a `MailCampaign` row with the resolved status.
+- `App\Mail\DepartmentNewsletter` is the Mailable; template at `resources/views/mail/department-newsletter.blade.php`.
+- Scheduling is **DB-driven, not config-driven.** `routes/console.php` registers `mail:send-scheduled` to run **every minute**. The command (`App\Console\Commands\SendMonthlyDepartmentMail`) checks `MailSchedule::current()->isDueAt(now())` and exits early unless the configured frequency + day + time matches the current minute. `last_sent_at` is stamped to prevent same-minute re-fires. Use `--force` to bypass the schedule check.
+
+### UI structure
+
+All routes live under `Route::middleware(['auth'])` in `routes/web.php`:
+
+- `/mail-automation` (`mail-automation/index.tsx`) — mode-switcher landing page. Picks between **Set up automated schedule** and **Compose & send now**. Both modes use the shared `RecipientPicker` (defined inline at the bottom of the page).
+- `/mail-automation/recipients` (`mail-automation/recipients.tsx`) — full CRUD on `DepartmentEmail` with search, client-side pagination, row selection, bulk delete, and per-row active toggle.
+- `/mail-automation/history` (`mail-automation/history.tsx`) — campaign log with expandable rows showing body preview + recipient list.
+
+### Frontend patterns specific to this feature
+
+- The reusable confirmation modal is `resources/js/components/confirm-dialog.tsx` (built on shadcn Dialog). Use it instead of `window.confirm`.
+- `resources/js/components/rich-text-editor.tsx` wraps TipTap (`@tiptap/react` + `@tiptap/starter-kit` + `@tiptap/extension-link`). Editor body styles live in `resources/css/app.css` under the `.tiptap-editor` selector — the project does NOT use `@tailwindcss/typography`.
+- `resources/js/components/stat-card.tsx` is the canonical stat tile (value on top, label below). Use it instead of writing ad-hoc stat blocks.
+
+### Environment
+
+The app expects `MAIL_MAILER=ses` plus AWS credentials in production. In dev with no SES configured, leave `MAIL_MAILER=log` — `DepartmentMailer` will still write a `MailCampaign` row with `status=sent` because Laravel's `log` mailer succeeds.
+
+### Windows / Herd
+
+The app is typically served via Laravel Herd at a `.test` domain (e.g. `web-team-mail-automation.test`), not via `php artisan serve`. The Vite preview tool (`.claude/launch.json` lists vite on `:5173`) cannot render the full Inertia app — it only serves the asset bundle. For visual verification, the developer's own browser session against the Herd domain is the only working path.
