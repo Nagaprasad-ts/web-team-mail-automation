@@ -10,6 +10,7 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
+import StatCard from '@/components/stat-card';
 
 type Campaign = {
     id: number;
@@ -76,52 +77,34 @@ export default function MailHistoryPage({ campaigns, stats }: Props) {
 
     return (
         <>
-            <Head title="Campaign History" />
+            <Head title="Email Logs" />
 
             <div className="flex flex-col gap-6 p-4 pb-8">
                 {/* Header */}
                 <div>
-                    <h1 className="text-xl font-semibold tracking-tight">Campaign History</h1>
+                    <h1 className="text-xl font-semibold tracking-tight">Email Logs</h1>
                     <p className="mt-0.5 text-sm text-muted-foreground">
-                        A complete record of every newsletter dispatched — manual or automated.
+                        A complete record of every email dispatched — manual or automated.
                     </p>
                 </div>
 
                 {/* Stats */}
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                    <StatTile
-                        icon={Mail}
-                        value={stats.total}
-                        label="Total campaigns"
-                        iconClass="text-muted-foreground"
-                    />
-                    <StatTile
-                        icon={CalendarClock}
-                        value={stats.automated}
-                        label="Automated"
-                        iconClass="text-primary"
-                        valueClass="text-primary"
-                    />
-                    <StatTile
-                        icon={Hand}
-                        value={stats.manual}
-                        label="Manual"
-                        iconClass="text-blue-500"
-                        valueClass="text-blue-500"
-                    />
-                    <StatTile
-                        icon={stats.failed > 0 ? AlertTriangle : CheckCircle2}
-                        value={stats.failed}
+                    <StatCard label="Total sent" value={stats.total} icon={Mail} />
+                    <StatCard label="Automated" value={stats.automated} icon={CalendarClock} tint="text-primary" />
+                    <StatCard label="Manual" value={stats.manual} icon={Hand} tint="text-blue-500" />
+                    <StatCard
                         label="Needs attention"
-                        iconClass={stats.failed > 0 ? 'text-red-500' : 'text-green-500'}
-                        valueClass={stats.failed > 0 ? 'text-red-500' : 'text-green-500'}
+                        value={stats.failed}
+                        icon={stats.failed > 0 ? AlertTriangle : CheckCircle2}
+                        tint={stats.failed > 0 ? 'text-red-500' : 'text-green-500'}
                     />
                 </div>
 
                 {/* Campaign list */}
                 <div className="rounded-xl border bg-card">
                     <div className="border-b px-5 py-4">
-                        <h2 className="font-semibold">All campaigns</h2>
+                        <h2 className="font-semibold">All sent emails</h2>
                         <p className="mt-0.5 text-sm text-muted-foreground">
                             Click a row to expand the full email preview and recipient list.
                         </p>
@@ -133,9 +116,9 @@ export default function MailHistoryPage({ campaigns, stats }: Props) {
                                 <Inbox className="size-7 text-muted-foreground" />
                             </div>
                             <div>
-                                <h3 className="font-semibold">No campaigns yet</h3>
+                                <h3 className="font-semibold">No emails sent yet</h3>
                                 <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-                                    Once a newsletter is dispatched it will appear here for review.
+                                    Once an email is dispatched it will appear here for review.
                                 </p>
                             </div>
                             <Link
@@ -257,26 +240,3 @@ export default function MailHistoryPage({ campaigns, stats }: Props) {
     );
 }
 
-function StatTile({
-    icon: Icon,
-    value,
-    label,
-    iconClass = '',
-    valueClass = '',
-}: {
-    icon: React.ComponentType<{ className?: string }>;
-    value: number;
-    label: string;
-    iconClass?: string;
-    valueClass?: string;
-}) {
-    return (
-        <div className="rounded-xl border bg-card p-5">
-            <div className="flex items-start justify-between">
-                <p className={`text-3xl font-semibold ${valueClass}`}>{value}</p>
-                <Icon className={`size-4 ${iconClass}`} />
-            </div>
-            <p className="mt-2 text-sm text-muted-foreground">{label}</p>
-        </div>
-    );
-}

@@ -12,6 +12,7 @@ import {
 import { useState } from 'react';
 import { toast } from 'sonner';
 import ConfirmDialog from '@/components/confirm-dialog';
+import StatCard from '@/components/stat-card';
 import { Button } from '@/components/ui/button';
 
 type Schedule = {
@@ -104,7 +105,7 @@ export default function SchedulesPage({ schedules, stats }: Props) {
                     <div>
                         <h1 className="text-xl font-semibold tracking-tight">Schedules</h1>
                         <p className="mt-0.5 text-sm text-muted-foreground">
-                            Each schedule runs independently on its own cadence with its own template and recipients.
+                            Each schedule runs independently on its own cadence with its own email template and recipients.
                         </p>
                     </div>
                     <Button asChild>
@@ -116,20 +117,9 @@ export default function SchedulesPage({ schedules, stats }: Props) {
 
                 {/* Stats strip */}
                 <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-xl border bg-card p-4 text-center">
-                        <p className="text-2xl font-semibold">{stats.total}</p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">Total</p>
-                    </div>
-                    <div className="rounded-xl border bg-card p-4 text-center">
-                        <p className="text-2xl font-semibold text-green-600">{stats.active}</p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">Active</p>
-                    </div>
-                    <div className="rounded-xl border bg-card p-4 text-center">
-                        <p className={`text-2xl font-semibold ${stats.paused > 0 ? 'text-amber-600' : 'text-muted-foreground'}`}>
-                            {stats.paused}
-                        </p>
-                        <p className="mt-0.5 text-xs text-muted-foreground">Paused</p>
-                    </div>
+                    <StatCard label="Total" value={stats.total} />
+                    <StatCard label="Active" value={stats.active} tint="text-green-600" />
+                    <StatCard label="Paused" value={stats.paused} tint={stats.paused > 0 ? 'text-amber-600' : 'text-muted-foreground'} />
                 </div>
 
                 {/* List */}
@@ -141,7 +131,7 @@ export default function SchedulesPage({ schedules, stats }: Props) {
                         <div>
                             <h3 className="font-semibold">No schedules yet</h3>
                             <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-                                Create a schedule to start automating department newsletter sends.
+                                Create a schedule to start automating department email sends.
                             </p>
                         </div>
                         <Button asChild>

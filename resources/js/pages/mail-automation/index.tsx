@@ -43,7 +43,7 @@ export default function MailAutomationIndex({ scheduleStats, overview }: Props) 
                 <div>
                     <h1 className="text-xl font-semibold tracking-tight">Mail Automation</h1>
                     <p className="mt-0.5 text-sm text-muted-foreground">
-                        Manage your department newsletter — automated or on demand.
+                        Send emails to departments — automated on a schedule or on demand.
                     </p>
                 </div>
 
@@ -113,7 +113,7 @@ export default function MailAutomationIndex({ scheduleStats, overview }: Props) 
                         <div className="flex-1">
                             <h2 className="font-semibold">New Automated Schedule</h2>
                             <p className="mt-1 text-sm text-muted-foreground">
-                                Set a cadence, write a template, pick recipients. The system fires it automatically.
+                                Set a cadence, write an email template, pick recipients. The system fires it automatically.
                             </p>
                         </div>
                         <span className="text-sm font-medium text-primary group-hover:underline">
@@ -176,7 +176,7 @@ export default function MailAutomationIndex({ scheduleStats, overview }: Props) 
                             href="/mail-automation/history"
                             className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
                         >
-                            <History className="size-3.5" /> No campaigns yet
+                            <History className="size-3.5" /> No emails sent yet
                         </Link>
                     )}
                     {lc?.sent_at && (

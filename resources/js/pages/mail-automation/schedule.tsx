@@ -53,7 +53,7 @@ const WEEKDAYS = [
 
 const DEFAULT_TEMPLATE = `<p>Dear Team,</p>
 <p>Greetings from the NHEI Web Team!</p>
-<p>[Write your monthly update here...]</p>
+<p>[Write your message here...]</p>
 <p>Regards,<br/>NHEI Web Team</p>`;
 
 export default function ScheduleFormPage({ departments, schedule }: Props) {
@@ -178,7 +178,7 @@ export default function ScheduleFormPage({ departments, schedule }: Props) {
                     {/* Timing */}
                     <section className="rounded-xl border bg-card p-6">
                         <h2 className="font-semibold">Timing</h2>
-                        <p className="mt-0.5 text-sm text-muted-foreground">When should this newsletter go out?</p>
+                        <p className="mt-0.5 text-sm text-muted-foreground">When should this email go out?</p>
 
                         <div className="mt-5 grid gap-4 sm:grid-cols-3">
                             <div className="space-y-2">
@@ -255,7 +255,7 @@ export default function ScheduleFormPage({ departments, schedule }: Props) {
                             <Input
                                 value={form.data.subject}
                                 onChange={(e) => form.setData('subject', e.target.value)}
-                                placeholder="Monthly update from the NHEI Web Team"
+                                placeholder="e.g. Update from the NHEI Web Team"
                             />
                             {form.errors.subject && (
                                 <p className="text-xs text-red-600">{form.errors.subject}</p>

@@ -44,7 +44,7 @@ export function AppSidebar() {
             icon: Users,
         },
         {
-            title: 'Campaign History',
+            title: 'Logs',
             href: '/mail-automation/history',
             icon: History,
         },
